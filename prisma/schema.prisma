@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  first_name String
+  last_name  String?
+  email      String     @id @unique
+  password   String
+  Role       String     @default("Student")
+  Sessions   Session[]
+  presentOn Attendance[]
+  Class      Class?     @relation(fields: [classId], references: [classId])
+  classId    String
+}
+
+model Class {
+  classId String @id @unique
+  batch   Int
+  course  String
+  section String
+  Student User[]
+}
+
+model Attendance {
+  day       DateTime @id @unique
+  users     User     @relation(fields: [userEmail], references: [email])
+  userEmail String   @unique
+}
+
+model Session {
+  cookie     String   @id @default(uuid())
+  created    DateTime @default(now())
+  belongs_to User     @relation(references: [email], fields: [userEmail])
+  userEmail  String
+}
+
+// enum Role {
+//   Admin
+//   Teacher
+//   Class_Rep
+//   Student
+// }
