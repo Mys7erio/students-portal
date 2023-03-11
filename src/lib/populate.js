@@ -28,7 +28,7 @@ const createStudents = async (maxRoll, classId) => {
                 first_name: `Student${roll}`,
                 last_name: "",
                 email: `${classId}${roll}@organisation.com`,
-                password: `student${roll}`,
+                password: `student${classId}${roll}`,
                 classId: classId, // hopefully this does not have a conflicts with the key
                 Role: role
             }
